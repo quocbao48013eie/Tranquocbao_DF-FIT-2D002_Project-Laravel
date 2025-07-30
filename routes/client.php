@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Client\CandidateController;
 use App\Http\Controllers\Client\EmployerController;
+use App\Http\Controllers\Client\GoogleController;
 use App\Http\Controllers\Client\ProfileController;
 use App\Http\Middleware\CheckIsEmployer;
 use Illuminate\Support\Facades\Route;
@@ -74,4 +75,8 @@ Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 Route::get('/apply-job/{id}', [CandidateController::class, 'showApplyForm'])->name('client.apply_job_form');
 Route::post('/apply-job/{id}', [CandidateController::class, 'applyJob'])->name('client.apply_job');
-Route::get('applications/{id}', [CandidateController::class, 'viewApplication'])->name('client.applications');
+Route::get('applications', [EmployerController::class, 'viewApplication'])->name('client.applications')->middleware(CheckIsEmployer::class);
+Route::get('applications_detail/{id}', [EmployerController::class, 'viewApplicationDetail'])->name('client.applications_detail')->middleware(CheckIsEmployer::class);
+Route::get('company_detail/{id}', [CandidateController::class, 'viewCompany'])->name('client.company_detail')->middleware(CheckIsEmployer::class);
+Route::get('google/redirect', [GoogleController::class, 'redirect'])->name('client.google.redirect');
+Route::get('google/callback', [GoogleController::class, 'callback'])->name('client.google.callback');

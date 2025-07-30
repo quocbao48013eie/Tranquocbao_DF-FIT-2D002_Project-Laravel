@@ -16,10 +16,14 @@
                                     style="height: 35px; font-size: 1rem; padding: 10px 20px;">Nhà Tuyển Dụng <i
                                         class="ml-2 fa fa-building" aria-hidden="true"></i></i></span>
                             @endif
-
                             <div class="text-center mb-4">
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=0D8ABC&color=fff&size=100"
-                                    alt="Avatar" class="rounded-circle shadow-sm" width="100" height="100">
+                                @if ($user->role == 'employer' && $user->employer->company_logo)
+                                    <img src="{{ asset($user->employer->company_logo) }}" alt="Avatar"
+                                        class="rounded-circle shadow-sm" width="100" height="100">
+                                @else
+                                    <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=0D8ABC&color=fff&size=100"
+                                        alt="Avatar" class="rounded-circle shadow-sm" width="100" height="100">
+                                @endif
                                 <h5 class="mt-3">{{ $user->name }}</h5>
                                 <p class="text-muted">{{ $user->email }}</p>
                             </div>
@@ -54,13 +58,20 @@
                                     <div class="col-sm-8">{!! $user->employer->description !!}</div>
                                 </div>
                             @endif
+
                             <div class="text-end">
                                 <a href="#" class="btn btn-outline-primary">Chỉnh sửa</a>
+                                @if ($user->role == 'employer')
+                                     <a href="{{ route('client.applications') }}" class="btn btn-primary">
+                                    📄 Xem danh sách đơn ứng tuyển
+                                </a>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </section>
 @endsection

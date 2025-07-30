@@ -12,23 +12,28 @@
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate est, consequuntur
                             perferendis.</p>
                     </div>
-                    <form method="get" action="{{route('client.index')}}" class="search-jobs-form">
+                    <form method="get" action="{{ route('client.index') }}" class="search-jobs-form">
                         <div class="row mb-5">
                             <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                                <input type="text" class="form-control form-control-lg" name="keyword" value="{{ request('keyword') }}" placeholder="Job title, Company...">
+                                <input type="text" class="form-control form-control-lg" name="keyword"
+                                    value="{{ request('keyword') }}" placeholder="Job title, Company...">
                             </div>
                             <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                                 <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%"
                                     data-live-search="true" title="Select Region" name="region">
-                                    <option {{ request('region') === 'HCM' ? 'selected' : '' }} value="HCM">Hồ Chí Minh</option>
-                                    <option {{ request('region') === 'HN' ? 'selected' : '' }} value="HN">Hà Nội</option>
+                                    <option {{ request('region') === 'HCM' ? 'selected' : '' }} value="HCM">Hồ Chí Minh
+                                    </option>
+                                    <option {{ request('region') === 'HN' ? 'selected' : '' }} value="HN">Hà Nội
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                                 <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%"
                                     data-live-search="true" title="Select Job Type" name="job_type">
-                                    <option {{ request('job_type') === '0' ? 'selected' : '' }} value="0">Part Time</option>
-                                    <option {{ request('job_type') === '1' ? 'selected' : '' }} value="1">Full Time</option>
+                                    <option {{ request('job_type') === '0' ? 'selected' : '' }} value="0">Part Time
+                                    </option>
+                                    <option {{ request('job_type') === '1' ? 'selected' : '' }} value="1">Full Time
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
@@ -116,8 +121,13 @@
                     <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
                         <a href="{{ route('client.job_single', ['jobDetail' => $data->id]) }}"></a>
                         <div class="job-listing-logo">
-                            <img src="{{ asset('client/images/job_logo_1.jpg') }}"
-                                alt="Free Website Template by Free-Template.co" class="img-fluid">
+                            @if ($data->employer->company_logo)
+                                <img src="{{ asset($data->employer->company_logo) }}"
+                                    alt="Free Website Template by Free-Template.co" class="img-fluid">
+                            @else
+                                <img src="{{ asset('client/df.jpg') }}" alt="Free Website Template by Free-Template.co"
+                                    class="img-fluid">
+                            @endif
                         </div>
 
                         <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">

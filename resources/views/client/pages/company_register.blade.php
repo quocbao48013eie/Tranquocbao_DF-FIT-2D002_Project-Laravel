@@ -11,7 +11,7 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-    <link href="{{asset('client/css/quill.snow.css')}}" rel="stylesheet">
+    <link href="{{ asset('client/css/quill.snow.css') }}" rel="stylesheet">
 
     <style>
         body {
@@ -83,59 +83,90 @@
 
         <h4 class="mb-4 text-center">Đăng ký tài khoản nhà tuyển dụng</h4>
 
-        <form action="{{ route('register') }}" method="POST">
+        <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <!-- Tài khoản người dùng -->
             <div class="mb-3">
                 <label for="name">Tên người dùng <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}"
-                    placeholder="Nhập tên của bạn" required>
+                <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
+                    id="name" value="{{ old('name') }}" placeholder="Nhập tên của bạn" required>
+                @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="email">Email <span class="text-danger">*</span></label>
-                <input type="email" class="form-control" name="email" id="email" value="{{ old('email') }}"
-                    placeholder="Nhập email..." required>
+                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                    id="email" value="{{ old('email') }}" placeholder="Nhập email..." required>
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
-            <div class="mb-3">
-                <input type="hidden" name="role" value="employer" id="role">
-            </div>
+
+            <input type="hidden" name="role" value="employer" id="role">
+
             <div class="mb-3">
                 <label for="password">Mật khẩu <span class="text-danger">*</span></label>
-                <input type="password" class="form-control" name="password" id="password"
-                    placeholder="Nhập mật khẩu..." required>
+                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password"
+                    id="password" placeholder="Nhập mật khẩu..." required>
+                @error('password')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
                 <label for="password_confirmation">Xác nhận mật khẩu <span class="text-danger">*</span></label>
-                <input type="password" class="form-control" name="password_confirmation" id="password_confirmation"
-                    placeholder="Nhập lại mật khẩu..." required>
+                <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror"
+                    name="password_confirmation" id="password_confirmation" placeholder="Nhập lại mật khẩu..." required>
+                @error('password_confirmation')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
-            <!-- Thông tin công ty -->
             <div class="mb-3">
                 <label for="company_name">Tên công ty <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="company_name" id="company_name"
-                    value="{{ old('company_name') }}" placeholder="VD: Công ty TNHH ABC" required>
+                <input type="text" class="form-control @error('company_name') is-invalid @enderror"
+                    name="company_name" id="company_name" value="{{ old('company_name') }}"
+                    placeholder="VD: Công ty TNHH ABC" required>
+                @error('company_name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="logo">Upload Logo <span class="text-danger">*</span></label>
+                <input type="file" name="logo" class="form-control @error('logo') is-invalid @enderror" required>
+                @error('logo')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label for="website">Website</label>
-                <input type="url" class="form-control" name="website" id="website" value="{{ old('website') }}"
-                    placeholder="https://example.com">
+                <input type="url" class="form-control @error('website') is-invalid @enderror" name="website"
+                    id="website" value="{{ old('website') }}" placeholder="https://example.com">
+                @error('website')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="mb-3">
-                <div id="editor-1" style="height: 200px;">Write Job Description!</div>
                 <label for="description">Mô tả công ty</label>
+                <div id="editor-1" style="height: 200px;">{!! old('description') !!}</div>
                 <input type="hidden" name="description" value="{{ old('description') }}" id="description">
+                @error('description')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
                 <label for="address">Địa chỉ</label>
-                <input type="text" class="form-control" name="address" id="address" value="{{ old('address') }}"
-                    placeholder="Số nhà, đường, quận, TP...">
+                <input type="text" class="form-control @error('address') is-invalid @enderror" name="address"
+                    id="address" value="{{ old('address') }}" placeholder="Số nhà, đường, quận, TP...">
+                @error('address')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -146,10 +177,11 @@
                 <button type="submit" class="btn btn-primary btn-lg">Đăng ký</button>
             </div>
         </form>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{asset('client/js/quill.min.js')}}"></script>
+    <script src="{{ asset('client/js/quill.min.js') }}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const quill = new Quill('#editor-1', {

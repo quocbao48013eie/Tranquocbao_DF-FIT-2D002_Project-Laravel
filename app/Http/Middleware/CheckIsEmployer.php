@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\JobApplication;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,8 +22,18 @@ class CheckIsEmployer
         }
 
         if (Auth::user()->role != 'employer') {
-            return redirect()->route('client.index');
+            abort(403, 'Bạn không có quyền truy cập đơn ứng tuyển này.');
         }
+
+        $applicationId = $request->route('id');
+        if ($applicationId) {
+            $application = JobApplication::with('job')->find($applicationId);
+            if (!$application || !$application->job || $application->job->employer->user_id != Auth::id()
+            ) {
+                abort(403, 'Bạn không có quyền truy cập đơn ứng tuyển này.');
+            }
+        }
+
         return $next($request);
     }
 }
