@@ -51,8 +51,8 @@
                             </div>
 
                             <div class="mt-4 text-right">
-                                 <a href="" class="btn btn-secondary">❌ Từ Chối</a>
-                                              <a href="" class="btn btn-secondary">✅ Chấp Nhận</a>
+                                <a href="{{ route('client.applications_detail.refuse', $application->id) }}" class="btn btn-secondary">❌ Từ Chối</a>
+                                <a href="{{ route('client.applications_detail.accept', $application->id) }}" class="btn btn-secondary">✅ Chấp Nhận</a>
                                 <a href="{{ route('client.applications') }}" class="btn btn-secondary">⬅️ Quay lại danh</a>
                             </div>
 

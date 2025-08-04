@@ -31,7 +31,6 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // Validate cơ bản áp dụng chung cho mọi loại user
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
@@ -41,7 +40,6 @@ class RegisteredUserController extends Controller
 
         $role = $request->role;
 
-        // Validate riêng cho employer
         if ($role === 'employer') {
             $request->validate([
                 'company_name' => ['required', 'string', 'max:255'],
@@ -52,7 +50,6 @@ class RegisteredUserController extends Controller
             ]);
         }
 
-        // Tạo user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -60,7 +57,6 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Tạo dữ liệu phụ tùy theo role
         if ($role === 'employer') {
             $employer = new Employer();
             $employer->user_id = $user->id;

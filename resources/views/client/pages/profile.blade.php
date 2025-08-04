@@ -14,7 +14,11 @@
                             @if ($user->role == 'employer')
                                 <span class="badge badge-pill badge-dark"
                                     style="height: 35px; font-size: 1rem; padding: 10px 20px;">Nhà Tuyển Dụng <i
-                                        class="ml-2 fa fa-building" aria-hidden="true"></i></i></span>
+                                        class="ml-2 fa fa-building" aria-hidden="true"></i></span>
+                                
+                            @elseif ($user->role == 'admin')
+                                <span class="badge badge-pill badge-dark"
+                                    style="height: 35px; font-size: 1rem; padding: 10px 20px;">Admin 👑</span>
                             @endif
                             <div class="text-center mb-4">
                                 @if ($user->role == 'employer' && $user->employer->company_logo)
@@ -60,11 +64,13 @@
                             @endif
 
                             <div class="text-end">
-                                <a href="#" class="btn btn-outline-primary">Chỉnh sửa</a>
+
                                 @if ($user->role == 'employer')
-                                     <a href="{{ route('client.applications') }}" class="btn btn-primary">
-                                    📄 Xem danh sách đơn ứng tuyển
-                                </a>
+                                    <a href="{{ route('client.job_post') }}" class="btn btn-outline-primary">📋 Công việc
+                                        đã đăng tải</a>
+                                    <a href="{{ route('client.applications') }}" class="btn btn-outline-secondary">
+                                        📄 Xem danh sách đơn ứng tuyển
+                                    </a>
                                 @endif
                             </div>
                         </div>

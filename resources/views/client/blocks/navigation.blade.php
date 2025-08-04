@@ -32,9 +32,13 @@
                            </li>
                            <li><a href="{{ route('client.blog') }}">Blog</a></li>
                            <li><a href="{{ route('client.contact') }}">Contact</a></li>
-                           <li class="d-lg-none"><a href="{{ route('client.post_job') }}"><span
-                                       class="mr-2">+</span>Post a Job</a>
-                           </li>
+                           @if (Auth::check() && Auth::user()->role == 'employer')
+                               <li class="d-lg-none"><a href="{{ route('client.post_job') }}"><span
+                                           class="mr-2">+</span>Post a Job</a>
+                               </li>
+                           @else
+                           @endif
+
                            @if (!Auth::check())
                                <li class="d-lg-none"><a href="{{ route('login') }}">Log In</a></li>
                            @endif
@@ -43,11 +47,17 @@
 
                    <div class="right-cta-menu text-right d-flex align-items-center col-6 justify-content-end">
                        @if (Auth::check())
-                           <a href="{{ route('client.post_job') }}"
-                               class="btn btn-outline-white border-width-2 mr-3 {{ Auth::user()->role == 'candidate' ? 'd-none' : 'd-none d-lg-inline-block' }}">
-                               <span class="mr-2 icon-add"></span>Post a Job
-                           </a>
-
+                           @if (Auth::user()->role == 'employer')
+                               <a href="{{ route('client.post_job') }}"
+                                   class="btn btn-outline-white border-width-2 mr-3d-none d-lg-inline-block">
+                                   <span class="mr-2 icon-add"></span>Post a Job
+                               </a>
+                               @elseif (Auth::user()->role == 'admin')
+                                   <a href="{{ route('admin.job-chart') }}"
+                                   class="btn btn-outline-white border-width-2 mr-3d-none d-lg-inline-block">
+                                   <span class="mr-2"></span>Admin
+                               </a>
+                           @endif
                            <div class="dropdown show">
                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
                                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
@@ -59,13 +69,15 @@
                                        @csrf
                                        <button type="submit" class="dropdown-item">Log Out</button>
                                    </form>
-                                   <a class="dropdown-item" href="{{route('client.profile')}}">Profile</a>
-                                   <a class="dropdown-item" href="#">Something else here</a>
+                                   <a class="dropdown-item" href="{{ route('client.profile') }}">Profile</a>
+                                   @if (Auth::user()->role == 'candidate')
+                                       <a class="dropdown-item" href="{{ route('client.favorites') }}">Favorites</a>
+                                   @endif
                                </div>
                            </div>
                        @else
                            <a href="{{ route('client.post_job') }}"
-                               class="btn btn-outline-white border-width-2 mr-3 {{ Auth::check() ? 'd-none d-lg-inline-block' : 'd-none'}}">
+                               class="btn btn-outline-white border-width-2 mr-3 {{ Auth::check() ? 'd-none d-lg-inline-block' : 'd-none' }}">
                                <span class="mr-2 icon-add"></span>Post a Job
                            </a>
                            <a href="{{ route('login') }}"
@@ -73,7 +85,7 @@
                                <span class="mr-2 icon-lock_outline"></span>Log In
                            </a>
                        @endif
-                       <!-- Nút menu toggle mobile -->
+
                        <a href="#" class="site-menu-toggle js-menu-toggle d-inline-block d-xl-none mt-lg-2 ml-3">
                            <span class="icon-menu h3 m-0 p-0 mt-2"></span>
                        </a>

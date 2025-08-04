@@ -65,18 +65,6 @@
         </span>
     </a>
 
-    {{-- Facebook Button --}}
-    {{-- <a href=""
-       class="group relative flex items-center justify-center w-10 h-10 bg-white border border-gray-300 rounded-md shadow-sm overflow-hidden transition-all duration-300 hover:w-48 hover:justify-start hover:pl-3 hover:bg-gray-100">
-
-        <img src="https://www.facebook.com/images/fb_icon_325x325.png"
-             alt="Facebook" class="w-5 h-5 z-10 transition-transform duration-300 rounded-full" />
-
-        <span
-            class="absolute left-10 opacity-0 group-hover:opacity-100 text-sm text-gray-700 whitespace-nowrap transition-all duration-300">
-            Đăng nhập Facebook
-        </span>
-    </a> --}}
 </div>
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
 use App\Models\Employer;
+use App\Models\Favorites;
 use App\Models\JobApplication;
 use App\Models\PostJob;
 use Illuminate\Http\Request;
@@ -29,11 +30,20 @@ class CandidateController extends Controller
         $itemPerPage = config('pagination.item_per_page');
         $keyword = $request->keyword ? $this->normalizeString($request->keyword) : null;
         $region = $request->region ? $this->normalizeString($request->region) : null;
+
         PostJob::whereDate('deadline', '<', Carbon::today())->delete();
+
         if (!$keyword && !$region && $request->job_type === null) {
-            $datas = PostJob::query()->paginate($itemPerPage);
+            $datas = PostJob::query()
+                ->whereHas('employer.user', function ($q) {
+                    $q->whereNull('deleted_at');
+                })
+                ->paginate($itemPerPage);
         } else {
             $query = PostJob::query();
+            $query->whereHas('employer', function ($q) {
+                $q->whereNull('deleted_at');
+            });
 
             if ($keyword) {
                 $query->where('title', 'LIKE', '%' . $keyword . '%');
@@ -52,7 +62,6 @@ class CandidateController extends Controller
 
         return view('client.pages.index', ['datas' => $datas]);
     }
-
 
     public function detail(PostJob $jobDetail)
     {
@@ -109,5 +118,40 @@ class CandidateController extends Controller
     {
         $employer = Employer::findOrFail($id);
         return view('client.pages.company-detail', ['data' => $employer]);
+    }
+
+    public function savejob($id)
+    {
+        $candidateId = Auth::user()->candidate->id;
+        $existing = Favorites::where('candidate_id', $candidateId)
+            ->where('job_id', $id)
+            ->first();
+
+        if ($existing) {
+            return redirect()->route('client.index')->with('warning', 'Công việc này đã được lưu trước đó!');
+        }
+        $favorite = new Favorites();
+        $favorite->candidate_id = $candidateId;
+        $favorite->job_id = $id;
+        $favorite->save();
+
+        return redirect()->route('client.index');
+    }
+
+
+    public function showSaveJob()
+    {
+        $candidate_id = Auth::user()->candidate->id;
+        $datas = Favorites::where('candidate_id', $candidate_id)
+            ->with('job.employer')
+            ->get();;
+        return view('client.pages.favorites', ['datas' => $datas]);
+    }
+
+    public function removeFavorite($id)
+    {
+        $rmFavorites = Favorites::find($id);
+        $rmFavorites->delete();
+        return redirect()->route('client.favorites');
     }
 }

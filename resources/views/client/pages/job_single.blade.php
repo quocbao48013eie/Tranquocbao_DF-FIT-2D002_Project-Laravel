@@ -16,7 +16,6 @@
         </div>
     </section>
 
-
     <section class="site-section">
         <div class="container">
             <div class="row align-items-center mb-5">
@@ -35,8 +34,8 @@
                         <div>
                             <h2>{{ $data->title }}</h2>
                             <div>
-                                <span class="ml-0 mr-2 mb-2"><span
-                                        class="icon-briefcase mr-2"><a href="{{route('client.company_detail', $data->employer_id)}}"></span>{{ $data->employer->company_name }}</span></a>
+                                <span class="ml-0 mr-2 mb-2"><span class="icon-briefcase mr-2"><a
+                                            href="{{ route('client.company_detail', $data->employer_id) }}"></span>{{ $data->employer->company_name }}</span></a>
                                 <span class="m-2"><span class="icon-room mr-2"></span>{{ $data->location }}</span>
                                 <span class="m-2"><span class="icon-clock-o mr-2"></span><span
                                         class="text-primary">{{ $data->job_type ? 'Full Time' : 'Part Time' }}</span></span>
@@ -47,7 +46,8 @@
                 <div class="col-lg-4">
                     <div class="row">
                         <div class="col-6">
-                            <a href="#" class="btn btn-block btn-light btn-md"><span
+                            <a href="{{ Auth::check() ? route('client.savejob', $data->id) : route('login') }}"
+                                class="btn btn-block btn-light btn-md"><span
                                     class="icon-heart-o mr-2 text-danger"></span>Save Job</a>
                         </div>
                         <div class="col-6">
